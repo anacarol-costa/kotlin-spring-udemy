@@ -1,11 +1,13 @@
 package com.anacarolcosta.mercadolivro.controller
 
 import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
+import com.anacarolcosta.mercadolivro.controller.request.PutCustomerRequest
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -38,4 +40,13 @@ class CustomerController {
 
         customers.add(CustomerModel(id, customer.name, customer.email)) //criando o objeto
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun update(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
+        customers.filter { it.id ==id }.first().let {
+            it.name = customer.name
+            it.email = customer.email
+        } //funcao para atualizar o customer
+    } //similar ao post. Contudo ele irá apenas atualizar os dados
 }
