@@ -4,6 +4,7 @@ import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,9 +18,14 @@ class CustomerController {
     val customers = mutableListOf<CustomerModel>() //cria uma lista mutavel de algum tipo de dados
 
     @GetMapping //recebe dados
-    fun getCustomer(): MutableList<CustomerModel> {
+    fun getAll(): MutableList<CustomerModel> {
         return customers
     } //onde irá retornar o customerModel
+
+    @GetMapping("/{id}")
+    fun getCustomer(@PathVariable id: String): CustomerModel {
+        return customers.filter { it.id == id }.first() //retorna o indice, que foi primeiramente encontrado. o it = this
+    } //cria path params para retornar na url por id
 
     @PostMapping //criar recurso/dado
     @ResponseStatus(HttpStatus.CREATED) //notacao q indica a criacao de um objeto
