@@ -1,7 +1,10 @@
 package com.anacarolcosta.mercadolivro.controller
 
+import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -13,4 +16,9 @@ class CustomerController {
     fun getCustomer(): CustomerModel {
         return CustomerModel("1", "Carol", "carol@email.com")
     } //onde irá retornar o customerModel
+
+    @PostMapping //criar recurso/dado
+    fun create(@RequestBody customer: PostCustomerRequest) {
+        println(customer)
+    }
 }
