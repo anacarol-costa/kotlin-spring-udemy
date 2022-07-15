@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -21,9 +22,12 @@ class CustomerController {
     val customers = mutableListOf<CustomerModel>() //cria uma lista mutavel de algum tipo de dados
 
     @GetMapping //recebe dados
-    fun getAll(): MutableList<CustomerModel> {
+    fun getAll(@RequestParam name: String?): List<CustomerModel> {
+        name?.let {
+            return customers.filter { it.name.contains(name, ignoreCase = true) }
+        } //entra na funcao se a variavel name não for nula
         return customers
-    } //onde irá retornar o customerModel
+    } //? indica q eh um atributo n obrigatório, podendo vir com valor nulo
 
     @GetMapping("/{id}")
     fun getCustomer(@PathVariable id: String): CustomerModel {
