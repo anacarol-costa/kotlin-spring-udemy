@@ -2,7 +2,9 @@ package com.anacarolcosta.mercadolivro.controller
 
 import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
 import com.anacarolcosta.mercadolivro.controller.request.PutCustomerRequest
+import com.anacarolcosta.mercadolivro.extension.toCustomerModel
 import com.anacarolcosta.mercadolivro.model.CustomerModel
+import com.anacarolcosta.mercadolivro.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,47 +19,35 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("customers") //pasta ou caminho do endpoint
-class CustomerController {
-
-    val customers = mutableListOf<CustomerModel>() //cria uma lista mutavel de algum tipo de dados
+class CustomerController (
+    val customerService: CustomerService
+        ) {
 
     @GetMapping //recebe dados
     fun getAll(@RequestParam name: String?): List<CustomerModel> {
-        name?.let {
-            return customers.filter { it.name.contains(name, ignoreCase = true) }
-        } //entra na funcao se a variavel name não for nula
-        return customers
+       return customerService.getAll(name)
     } //? indica q eh um atributo n obrigatório, podendo vir com valor nulo
 
     @GetMapping("/{id}")
     fun getCustomer(@PathVariable id: String): CustomerModel {
-        return customers.filter { it.id == id }.first() //retorna o indice, que foi primeiramente encontrado. o it = this
+        return customerService.getCustomer(id)
     } //cria path params para retornar na url por id
 
     @PostMapping //criar recurso/dado
     @ResponseStatus(HttpStatus.CREATED) //notacao q indica a criacao de um objeto
     fun create(@RequestBody customer: PostCustomerRequest) {
-        val id = if (customers.isEmpty()) {
-            1
-        } else {
-            customers.last().id.toInt() + 1
-        }.toString() //funcao para criar de forma dinamica e crescente o id do novo objeto
-
-        customers.add(CustomerModel(id, customer.name, customer.email)) //criando o objeto
+        customerService.create(customer.toCustomerModel())
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
-        customers.filter { it.id ==id }.first().let {
-            it.name = customer.name
-            it.email = customer.email
-        } //funcao para atualizar o customer
+        customerService.update(customer.toCustomerModel(id))
     } //similar ao post. Contudo ele irá apenas atualizar os dados
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: String) {
-        customers.removeIf { it.id == id }
+        return customerService.delete(id)
     }
 }
