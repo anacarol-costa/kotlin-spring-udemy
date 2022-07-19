@@ -1,10 +1,7 @@
 package com.anacarolcosta.mercadolivro.service
 
-import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
-import com.anacarolcosta.mercadolivro.controller.request.PutCustomerRequest
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.RequestBody
 
 //onde fica todas as regras de negocio
 
