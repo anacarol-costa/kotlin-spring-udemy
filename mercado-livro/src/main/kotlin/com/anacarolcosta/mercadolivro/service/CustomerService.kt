@@ -16,7 +16,7 @@ class CustomerService {
         return customers
     }
 
-    fun getCustomer(id: String): CustomerModel {
+    fun getCustomer(id: Int): CustomerModel {
         return customers.filter { it.id == id }.first() //retorna o indice, que foi primeiramente encontrado. o it = this
     }
 
@@ -25,7 +25,7 @@ class CustomerService {
             1
         } else {
             customers.last().id!!.toInt() + 1
-        }.toString() //funcao para criar de forma dinamica e crescente o id do novo objeto
+        } //funcao para criar de forma dinamica e crescente o id do novo objeto
 
         customer.id = id
 
@@ -39,7 +39,7 @@ class CustomerService {
         } //funcao para atualizar o customer
     }
 
-    fun delete(id: String) {
+    fun delete(id: Int) {
         customers.removeIf { it.id == id }
     }
 }
