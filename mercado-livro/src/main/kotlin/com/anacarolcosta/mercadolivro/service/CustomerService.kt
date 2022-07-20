@@ -1,45 +1,44 @@
 package com.anacarolcosta.mercadolivro.service
 
 import com.anacarolcosta.mercadolivro.model.CustomerModel
+import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import org.springframework.stereotype.Service
 
 //onde fica todas as regras de negocio
 
 @Service
-class CustomerService {
-    val customers = mutableListOf<CustomerModel>() //cria uma lista mutavel de algum tipo de dados
+class CustomerService(
+    val customerRepository: CustomerRepository
+) {
 
     fun getAll(name: String?): List<CustomerModel> {
         name?.let {
-            return customers.filter { it.name.contains(name, ignoreCase = true) }
+            return customerRepository.findByNameContaining(it)
         } //entra na funcao se a variavel name não for nula
-        return customers
+        return customerRepository.findAll().toList()
     }
 
     fun getCustomer(id: Int): CustomerModel {
-        return customers.filter { it.id == id }.first() //retorna o indice, que foi primeiramente encontrado. o it = this
+       return customerRepository.findById(id).orElseThrow()
     }
 
     fun create(customer: CustomerModel) {
-        val id = if (customers.isEmpty()) {
-            1
-        } else {
-            customers.last().id!!.toInt() + 1
-        } //funcao para criar de forma dinamica e crescente o id do novo objeto
-
-        customer.id = id
-
-        customers.add(customer)
+        customerRepository.save(customer)
     }
 
     fun update(customer: CustomerModel) {
-        customers.filter { it.id == customer.id }.first().let {
-            it.name = customer.name
-            it.email = customer.email
-        } //funcao para atualizar o customer
+        if (!customerRepository.existsById(customer.id!!)){
+            throw Exception()
+        } //vai entrar aqui se o id nao existit
+
+            customerRepository.save(customer)
     }
 
     fun delete(id: Int) {
-        customers.removeIf { it.id == id }
+        if (!customerRepository.existsById(id)){
+            throw Exception()
+        } //vai entrar aqui se o id nao existit
+
+        customerRepository.deleteById(id)
     }
 }
