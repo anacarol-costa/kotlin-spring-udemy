@@ -29,7 +29,7 @@ class CustomerService(
     fun update(customer: CustomerModel) {
         if (!customerRepository.existsById(customer.id!!)){
             throw Exception()
-        } //vai entrar aqui se o id nao existit
+        } //vai entrar aqui se o id nao existir
 
             customerRepository.save(customer)
     }
