@@ -2,6 +2,7 @@ package com.anacarolcosta.mercadolivro.extension
 
 import com.anacarolcosta.mercadolivro.controller.request.PostBookRequest
 import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
+import com.anacarolcosta.mercadolivro.controller.request.PutBookRequest
 import com.anacarolcosta.mercadolivro.controller.request.PutCustomerRequest
 import com.anacarolcosta.mercadolivro.enums.BookStatus
 import com.anacarolcosta.mercadolivro.model.BookModel
@@ -21,5 +22,15 @@ fun PostBookRequest.toBookModel(customer: CustomerModel): BookModel {
         price = this.price,
         status = BookStatus.ATIVO,
         customer = customer
+    )
+}
+
+fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel {
+    return BookModel(
+        id = previousValue.id,
+        name = this.name ?: previousValue.name, // se o valor for nulo retornará o previousValue
+        price = this.price,
+        status = previousValue.status,
+        customer = previousValue.customer
     )
 }
