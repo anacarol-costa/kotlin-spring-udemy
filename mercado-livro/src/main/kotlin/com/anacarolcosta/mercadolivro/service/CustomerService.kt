@@ -1,5 +1,6 @@
 package com.anacarolcosta.mercadolivro.service
 
+import com.anacarolcosta.mercadolivro.enums.CustomerStatus
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import org.springframework.stereotype.Service
@@ -39,6 +40,9 @@ class CustomerService(
         val customer = findById(id)
 
         bookService.deleteByCustomer(customer)
-        customerRepository.deleteById(id)
+
+        customer.status = CustomerStatus.INATIVO
+
+        customerRepository.save(customer)
     }
 }

@@ -5,15 +5,16 @@ import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
 import com.anacarolcosta.mercadolivro.controller.request.PutBookRequest
 import com.anacarolcosta.mercadolivro.controller.request.PutCustomerRequest
 import com.anacarolcosta.mercadolivro.enums.BookStatus
+import com.anacarolcosta.mercadolivro.enums.CustomerStatus
 import com.anacarolcosta.mercadolivro.model.BookModel
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 
 fun PostCustomerRequest.toCustomerModel(): CustomerModel {
-    return CustomerModel(name = this.name, email = this.email)
+    return CustomerModel(name = this.name, email = this.email, status = CustomerStatus.ATIVO)
 }
 
-fun PutCustomerRequest.toCustomerModel(id: Int): CustomerModel {
-    return CustomerModel(id = id, name = this.name, email = this.email)
+fun PutCustomerRequest.toCustomerModel(previousValue: CustomerModel): CustomerModel {
+    return CustomerModel(id = previousValue.id, name = this.name, email = this.email, status = previousValue.status)
 }
 
 fun PostBookRequest.toBookModel(customer: CustomerModel): BookModel {
