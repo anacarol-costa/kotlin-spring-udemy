@@ -2,8 +2,9 @@ package com.anacarolcosta.mercadolivro.controller
 
 import com.anacarolcosta.mercadolivro.controller.request.PostCustomerRequest
 import com.anacarolcosta.mercadolivro.controller.request.PutCustomerRequest
+import com.anacarolcosta.mercadolivro.controller.response.CustomerResponse
 import com.anacarolcosta.mercadolivro.extension.toCustomerModel
-import com.anacarolcosta.mercadolivro.model.CustomerModel
+import com.anacarolcosta.mercadolivro.extension.toResponse
 import com.anacarolcosta.mercadolivro.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -24,13 +25,13 @@ class CustomerController (
         ) {
 
     @GetMapping //recebe dados
-    fun getAll(@RequestParam name: String?): List<CustomerModel> {
-       return customerService.getAll(name)
+    fun getAll(@RequestParam name: String?): List<CustomerResponse> {
+       return customerService.getAll(name).map { it.toResponse() }
     } //? indica q eh um atributo n obrigatório, podendo vir com valor nulo
 
     @GetMapping("/{id}")
-    fun getCustomer(@PathVariable id: Int): CustomerModel {
-        return customerService.findById(id)
+    fun getCustomer(@PathVariable id: Int): CustomerResponse {
+        return customerService.findById(id).toResponse()
     } //cria path params para retornar na url por id
 
     @PostMapping //criar recurso/dado
