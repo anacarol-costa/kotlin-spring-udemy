@@ -30,7 +30,7 @@ class CustomerController (
 
     @GetMapping("/{id}")
     fun getCustomer(@PathVariable id: Int): CustomerModel {
-        return customerService.getById(id)
+        return customerService.findById(id)
     } //cria path params para retornar na url por id
 
     @PostMapping //criar recurso/dado
