@@ -4,6 +4,7 @@ import com.anacarolcosta.mercadolivro.enums.BookStatus
 import com.anacarolcosta.mercadolivro.model.BookModel
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import com.anacarolcosta.mercadolivro.repository.BookRepository
+import com.anacarolcosta.mercadolivro.exception.NotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -25,7 +26,7 @@ class BookService(
     }
 
     fun findById(id: Int): BookModel {
-        return  bookRepository.findById(id).orElseThrow{Exception("Não existe este recurso!")}
+        return  bookRepository.findById(id).orElseThrow{ NotFoundException("Book [${id}] not exists!", "ML-0001") }
     }
 
     fun delete(id: Int) {
