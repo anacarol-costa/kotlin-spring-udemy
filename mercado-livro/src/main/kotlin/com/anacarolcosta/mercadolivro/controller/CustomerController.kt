@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("customers") //pasta ou caminho do endpoint
@@ -36,7 +37,7 @@ class CustomerController (
 
     @PostMapping //criar recurso/dado
     @ResponseStatus(HttpStatus.CREATED) //notacao q indica a criacao de um objeto
-    fun create(@RequestBody customer: PostCustomerRequest) {
+    fun create(@RequestBody @Valid customer: PostCustomerRequest) {
         customerService.create(customer.toCustomerModel())
     }
 
