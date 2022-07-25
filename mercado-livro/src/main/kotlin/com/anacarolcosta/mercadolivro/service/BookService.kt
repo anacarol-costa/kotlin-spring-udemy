@@ -1,6 +1,7 @@
 package com.anacarolcosta.mercadolivro.service
 
 import com.anacarolcosta.mercadolivro.enums.BookStatus
+import com.anacarolcosta.mercadolivro.enums.Errors
 import com.anacarolcosta.mercadolivro.model.BookModel
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import com.anacarolcosta.mercadolivro.repository.BookRepository
@@ -26,7 +27,7 @@ class BookService(
     }
 
     fun findById(id: Int): BookModel {
-        return  bookRepository.findById(id).orElseThrow{ NotFoundException("Book [${id}] not exists!", "ML-0001") }
+        return  bookRepository.findById(id).orElseThrow{ NotFoundException(Errors.ML101.message.format(id), Errors.ML101.code) }
     }
 
     fun delete(id: Int) {
