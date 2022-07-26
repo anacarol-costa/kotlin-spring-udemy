@@ -33,5 +33,5 @@ data class PurchaseModel(
     val price: BigDecimal,
 
     @Column
-    val createdAt: LocalDateTime //indica qdo a compra foi realizada
+    val createdAt: LocalDateTime = LocalDateTime.now() //indica qdo a compra foi realizada
 )
