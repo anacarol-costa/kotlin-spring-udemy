@@ -1,5 +1,6 @@
 package com.anacarolcosta.mercadolivro.config
 
+import com.anacarolcosta.mercadolivro.enums.Role
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import com.anacarolcosta.mercadolivro.security.AuthenticationFilter
 import com.anacarolcosta.mercadolivro.security.AuthorizationFilter
@@ -29,6 +30,10 @@ class SecurityConfig(
         "/customer"
     ) //rotas publicas
 
+    private val ADMIN_MATCHERS = arrayOf(
+        "/admins/**"
+    ) //todas as rotas q começam com admins
+
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetails).passwordEncoder(bCryptPasswordEncoder())
     } //autentica
@@ -38,6 +43,7 @@ class SecurityConfig(
         http.authorizeHttpRequests()
             .antMatchers(*PUBLIC_MATCHERS).permitAll()
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
+            .antMatchers(*ADMIN_MATCHERS).hasAnyAuthority((Role.ADMIN.description))
             .anyRequest().authenticated()//requests tem q está autenticadas
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))//filtro de autenticação
         http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))
