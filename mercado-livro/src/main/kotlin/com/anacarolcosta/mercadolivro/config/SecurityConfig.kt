@@ -2,6 +2,7 @@ package com.anacarolcosta.mercadolivro.config
 
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import com.anacarolcosta.mercadolivro.security.AuthenticationFilter
+import com.anacarolcosta.mercadolivro.security.JwtUtil
 import com.anacarolcosta.mercadolivro.service.UserDetailsCustomService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,7 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 @EnableWebSecurity
 class SecurityConfig(
     private val customerRepository: CustomerRepository,
-    private val userDetails : UserDetailsCustomService
+    private val userDetails : UserDetailsCustomService,
+    private val jwtUtil: JwtUtil
 ) : WebSecurityConfigurerAdapter() {
 
     private val PUBLIC_MATCHERS = arrayOf<String>()//url aberta
@@ -35,7 +37,7 @@ class SecurityConfig(
             .antMatchers(*PUBLIC_MATCHERS).permitAll()
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
             .anyRequest().authenticated()//requests tem q está autenticadas
-        http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository))//filtro de autenticação
+        http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))//filtro de autenticação
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//requisições independentes
     } //recebe as info
 
