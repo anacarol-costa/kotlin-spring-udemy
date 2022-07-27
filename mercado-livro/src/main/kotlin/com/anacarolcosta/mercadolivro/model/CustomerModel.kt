@@ -1,7 +1,7 @@
 package com.anacarolcosta.mercadolivro.model
 
 import com.anacarolcosta.mercadolivro.enums.CustomerStatus
-import com.anacarolcosta.mercadolivro.enums.Profile
+import com.anacarolcosta.mercadolivro.enums.Role
 import javax.persistence.*
 
 @Entity(name = "customer")
@@ -26,7 +26,7 @@ data class CustomerModel(
 
     @Column(name = "role")
     @CollectionTable(name = "customer_roles", joinColumns = [JoinColumn(name = "customer_id")]) //onde se deve buscar o dado
-    @ElementCollection(targetClass = Profile::class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    var roles: Set<Profile> = setOf() //lista q n recebe valores iguais
+    var roles: Set<Role> = setOf() //lista q n recebe valores iguais
 )//entidade customer do projeto com seus respectivos atributos
