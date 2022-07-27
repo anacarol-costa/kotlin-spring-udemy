@@ -2,6 +2,7 @@ package com.anacarolcosta.mercadolivro.config
 
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import com.anacarolcosta.mercadolivro.security.AuthenticationFilter
+import com.anacarolcosta.mercadolivro.security.AuthorizationFilter
 import com.anacarolcosta.mercadolivro.security.JwtUtil
 import com.anacarolcosta.mercadolivro.service.UserDetailsCustomService
 import org.springframework.context.annotation.Bean
@@ -31,6 +32,7 @@ class SecurityConfig(
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetails).passwordEncoder(bCryptPasswordEncoder())
     } //autentica
+
     override fun configure(http: HttpSecurity) {
         http.cors().and().csrf().disable()
         http.authorizeHttpRequests()
@@ -38,6 +40,7 @@ class SecurityConfig(
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
             .anyRequest().authenticated()//requests tem q está autenticadas
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))//filtro de autenticação
+        http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//requisições independentes
     } //recebe as info
 
