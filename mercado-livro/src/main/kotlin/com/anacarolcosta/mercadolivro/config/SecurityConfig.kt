@@ -1,5 +1,7 @@
 package com.anacarolcosta.mercadolivro.config
 
+import com.anacarolcosta.mercadolivro.repository.CustomerRepository
+import com.anacarolcosta.mercadolivro.security.AuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -11,7 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig() : WebSecurityConfigurerAdapter() {
+class SecurityConfig(
+    private val customerRepository: CustomerRepository
+) : WebSecurityConfigurerAdapter() {
 
     private val PUBLIC_MATCHERS = arrayOf<String>()//url aberta
 
@@ -25,7 +29,7 @@ class SecurityConfig() : WebSecurityConfigurerAdapter() {
             .antMatchers(*PUBLIC_MATCHERS).permitAll()
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
             .anyRequest().authenticated()//requests tem q está autenticadas
-
+        http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository))//filtro de autenticação
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//requisições independentes
     }
 
