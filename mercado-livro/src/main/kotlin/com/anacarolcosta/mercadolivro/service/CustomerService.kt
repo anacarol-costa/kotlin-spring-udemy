@@ -6,14 +6,16 @@ import com.anacarolcosta.mercadolivro.enums.Profile
 import com.anacarolcosta.mercadolivro.exception.NotFoundException
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
 //onde fica todas as regras de negocio
 
 @Service
 class CustomerService(
-    val customerRepository: CustomerRepository,
-    val bookService: BookService
+    private val customerRepository: CustomerRepository,
+    private val bookService: BookService,
+    private val bCrypt: BCryptPasswordEncoder
 ) {
 
     fun getAll(name: String?): List<CustomerModel> {
@@ -29,7 +31,8 @@ class CustomerService(
 
     fun create(customer: CustomerModel) {
         val customerCopy = customer.copy(
-            roles = setOf(Profile.CUSTOMER)
+            roles = setOf(Profile.CUSTOMER),
+            password = bCrypt.encode(customer.password)
         )
         customerRepository.save(customerCopy)
     }
