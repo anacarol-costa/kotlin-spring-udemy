@@ -5,8 +5,10 @@ import com.anacarolcosta.mercadolivro.controller.request.PutCustomerRequest
 import com.anacarolcosta.mercadolivro.controller.response.CustomerResponse
 import com.anacarolcosta.mercadolivro.extension.toCustomerModel
 import com.anacarolcosta.mercadolivro.extension.toResponse
+import com.anacarolcosta.mercadolivro.security.UserCanOnlyAcessTheirOwnResource
 import com.anacarolcosta.mercadolivro.service.CustomerService
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -26,11 +28,13 @@ class CustomerController (
         ) {
 
     @GetMapping //recebe dados
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun getAll(@RequestParam name: String?): List<CustomerResponse> {
        return customerService.getAll(name).map { it.toResponse() }
     } //? indica q eh um atributo n obrigatório, podendo vir com valor nulo
 
     @GetMapping("/{id}")
+    @UserCanOnlyAcessTheirOwnResource
     fun getCustomer(@PathVariable id: Int): CustomerResponse {
         return customerService.findById(id).toResponse()
     } //cria path params para retornar na url por id
