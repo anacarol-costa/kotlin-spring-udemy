@@ -4,6 +4,7 @@ import com.anacarolcosta.mercadolivro.enums.Role
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import com.anacarolcosta.mercadolivro.security.AuthenticationFilter
 import com.anacarolcosta.mercadolivro.security.AuthorizationFilter
+import com.anacarolcosta.mercadolivro.security.CustomAuthenticationEntryPoint
 import com.anacarolcosta.mercadolivro.security.JwtUtil
 import com.anacarolcosta.mercadolivro.service.UserDetailsCustomService
 import org.springframework.context.annotation.Bean
@@ -27,7 +28,8 @@ import org.springframework.web.filter.CorsFilter
 class SecurityConfig(
     private val customerRepository: CustomerRepository,
     private val userDetails : UserDetailsCustomService,
-    private val jwtUtil: JwtUtil
+    private val jwtUtil: JwtUtil,
+    private val customEntryPoint: CustomAuthenticationEntryPoint
 ) : WebSecurityConfigurerAdapter() {
 
     private val PUBLIC_MATCHERS = arrayOf<String>()//url aberta
@@ -54,6 +56,7 @@ class SecurityConfig(
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))//filtro de autenticação
         http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//requisições independentes
+        http.exceptionHandling().authenticationEntryPoint(customEntryPoint) //tratar exceptions
     } //recebe as info
 
     override fun configure(web: WebSecurity) {

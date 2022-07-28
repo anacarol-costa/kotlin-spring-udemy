@@ -28,7 +28,6 @@ class CustomerController (
         ) {
 
     @GetMapping //recebe dados
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun getAll(@RequestParam name: String?): List<CustomerResponse> {
        return customerService.getAll(name).map { it.toResponse() }
     } //? indica q eh um atributo n obrigatório, podendo vir com valor nulo
