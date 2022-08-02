@@ -35,12 +35,16 @@ class SecurityConfig(
     private val PUBLIC_MATCHERS = arrayOf<String>()//url aberta
 
     private val PUBLIC_POST_MATCHERS = arrayOf(
-        "/customer"
+        "/customers"
     ) //rotas publicas
 
     private val ADMIN_MATCHERS = arrayOf(
         "/admins/**"
     ) //todas as rotas q começam com admins
+
+    private val PUBLIC_GET_MATCHERS = arrayOf(
+        "/books"
+    )
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetails).passwordEncoder(bCryptPasswordEncoder())
@@ -52,6 +56,7 @@ class SecurityConfig(
             .antMatchers(*PUBLIC_MATCHERS).permitAll()
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
             .antMatchers(*ADMIN_MATCHERS).hasAnyAuthority((Role.ADMIN.description))
+            .antMatchers(HttpMethod.GET, *PUBLIC_GET_MATCHERS).permitAll()
             .anyRequest().authenticated()//requests tem q está autenticadas
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))//filtro de autenticação
         http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))
