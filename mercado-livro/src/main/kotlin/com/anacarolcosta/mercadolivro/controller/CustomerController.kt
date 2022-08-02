@@ -24,7 +24,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("customers") //pasta ou caminho do endpoint
 class CustomerController (
-    val customerService: CustomerService
+    private val customerService: CustomerService
         ) {
 
     @GetMapping //recebe dados
