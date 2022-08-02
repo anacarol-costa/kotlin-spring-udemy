@@ -3,7 +3,9 @@ package com.anacarolcosta.mercadolivro.controller
 import com.anacarolcosta.mercadolivro.controller.request.PostBookRequest
 import com.anacarolcosta.mercadolivro.controller.request.PutBookRequest
 import com.anacarolcosta.mercadolivro.controller.response.BookResponse
+import com.anacarolcosta.mercadolivro.controller.response.PageResponse
 import com.anacarolcosta.mercadolivro.extension.toBookModel
+import com.anacarolcosta.mercadolivro.extension.toPageResponse
 import com.anacarolcosta.mercadolivro.extension.toResponse
 import com.anacarolcosta.mercadolivro.service.BookService
 import com.anacarolcosta.mercadolivro.service.CustomerService
@@ -37,8 +39,8 @@ class BookController(
     }
 
     @GetMapping
-    fun findAll(@PageableDefault(page = 0, size = 10) pageable: Pageable): Page<BookResponse> {
-        return bookService.findAll(pageable).map { it.toResponse() }
+    fun findAll(@PageableDefault(page = 0, size = 10) pageable: Pageable): PageResponse<BookResponse> {
+        return bookService.findAll(pageable).map { it.toResponse() }.toPageResponse()
     }
 
     @GetMapping("/actives")
