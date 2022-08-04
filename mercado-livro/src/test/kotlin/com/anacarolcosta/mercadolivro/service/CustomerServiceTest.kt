@@ -39,7 +39,21 @@ class CustomerServiceTest {
 
         assertEquals(fakeCustomer, customers) //verifica se fakecustomers é igual a customers
         verify(exactly = 1) { customerRepository.findAll() } //verifica se o metodo foi realmente chamado
-        verify(exactly = 0) { customerRepository.findByNameContaining(any())} //se o metodo foi chamado mais de uma vez, quer dizer q tem algo errado
+        verify(exactly = 0) { customerRepository.findByNameContaining(any()) } //se o metodo foi chamado mais de uma vez, quer dizer q tem algo errado
+    }
+
+    @Test
+    fun `deve retornar os customers quando o nome for informado` () {
+        val name = Math.random().toString() //usar sempre strings aleatorias ou UUID.randomUUID().toString()
+        val fakeCustomer = listOf(buildCustomer(), buildCustomer())
+
+        every { customerRepository.findByNameContaining(name) } returns fakeCustomer
+
+        val customers = customerService.getAll(name)
+
+        assertEquals(fakeCustomer, customers)
+        verify(exactly = 0) { customerRepository.findAll() } //não deve ser chamado
+        verify(exactly = 1) { customerRepository.findByNameContaining(name) } //metodo a ser chamado
     }
 
     fun buildCustomer(
