@@ -56,6 +56,22 @@ class CustomerServiceTest {
         verify(exactly = 1) { customerRepository.findByNameContaining(name) } //metodo a ser chamado
     }
 
+    @Test
+    fun `deve criar customer e criptografar password` () {
+        val initialPassword = Math.random().toString()
+        val fakeCustomer = buildCustomer(password = initialPassword)
+        val fakePassword = UUID.randomUUID().toString()
+        val fakeCustomerEncrypted = fakeCustomer.copy(password = fakePassword)
+
+        every { customerRepository.save(fakeCustomerEncrypted) } returns fakeCustomer
+        every { bCrypt.encode(initialPassword) } returns fakePassword
+
+        customerService.create(fakeCustomer)
+
+        verify(exactly = 1) { customerRepository.save(fakeCustomerEncrypted) }
+        verify(exactly = 1) { bCrypt.encode(initialPassword) }
+    }
+
     fun buildCustomer(
         id: Int? = null,
         name: String = "nome do customer",
