@@ -2,6 +2,7 @@ package com.anacarolcosta.mercadolivro.service
 
 import com.anacarolcosta.mercadolivro.enums.CustomerStatus
 import com.anacarolcosta.mercadolivro.enums.Role
+import com.anacarolcosta.mercadolivro.exception.NotFoundException
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import io.mockk.every
@@ -11,9 +12,11 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
+import java.util.Random
 
 @ExtendWith(MockKExtension::class)
 class CustomerServiceTest {
@@ -57,8 +60,8 @@ class CustomerServiceTest {
     }
 
     @Test
-    fun `deve criar customer e criptografar password` () {
-        val initialPassword = Math.random().toString()
+    fun `deve criar customer e criptografar password`() {
+        val initialPassword = Random().nextInt().toString()
         val fakeCustomer = buildCustomer(password = initialPassword)
         val fakePassword = UUID.randomUUID().toString()
         val fakeCustomerEncrypted = fakeCustomer.copy(password = fakePassword)
@@ -70,6 +73,36 @@ class CustomerServiceTest {
 
         verify(exactly = 1) { customerRepository.save(fakeCustomerEncrypted) }
         verify(exactly = 1) { bCrypt.encode(initialPassword) }
+    }
+
+    @Test
+    fun `deve retornar customer pelo id`() {
+        val id = Random().nextInt()
+        val fakeCustomer = buildCustomer(id = id)
+
+        every { customerRepository.findById(id) } returns Optional.of(fakeCustomer)
+
+        val customer = customerService.findById(id)
+
+        assertEquals(fakeCustomer, customer)
+        verify(exactly = 1) { customerRepository.findById(id) }
+    }
+
+
+    @Test
+    fun `deve indicar erro quando o customer não for encontrado`() {
+        val id = Random().nextInt()
+
+        every { customerRepository.findById(id) } returns Optional.empty() //deve retornar vazio
+
+        val error = assertThrows<NotFoundException>{
+            customerService.findById(id)
+        }
+
+        assertEquals("Customer [${id}] not exists!", error.message)
+        assertEquals("ML-201", error.errorCode)
+
+        verify(exactly = 1) { customerRepository.findById(id) }
     }
 
     fun buildCustomer(
