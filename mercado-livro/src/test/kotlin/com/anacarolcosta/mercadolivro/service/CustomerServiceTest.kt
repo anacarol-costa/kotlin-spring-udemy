@@ -4,6 +4,7 @@ import com.anacarolcosta.mercadolivro.enums.CustomerStatus
 import com.anacarolcosta.mercadolivro.enums.Errors
 import com.anacarolcosta.mercadolivro.enums.Role
 import com.anacarolcosta.mercadolivro.exception.NotFoundException
+import com.anacarolcosta.mercadolivro.helper.buildCustomer
 import com.anacarolcosta.mercadolivro.model.CustomerModel
 import com.anacarolcosta.mercadolivro.repository.CustomerRepository
 import io.mockk.every
@@ -201,18 +202,4 @@ class CustomerServiceTest {
         assertFalse(emailAvailable)
         verify(exactly = 1) { customerRepository.existsByEmail(email) }
     }
-
-    fun buildCustomer(
-        id: Int? = null,
-        name: String = "nome do customer",
-        email: String = "${UUID.randomUUID()}@email.com",
-        password: String = "senha"
-    ) = CustomerModel(
-        id = id,
-        name = name,
-        email = email,
-        status = CustomerStatus.ATIVO,
-        password = password,
-        roles = setOf(Role.CUSTOMER)
-    )
 }
