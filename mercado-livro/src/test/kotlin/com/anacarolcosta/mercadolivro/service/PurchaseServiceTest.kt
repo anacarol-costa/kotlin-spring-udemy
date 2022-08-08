@@ -29,32 +29,31 @@ class PurchaseServiceTest {
 
     val purchaseEventSlot =slot<PurchaseEvent>() //slot criado para verificar evento
 
-    //teste falhou
 
     @Test
     fun `deve criar purchase e publicar event`() {
-        //val purchase =buildPurchase()
+        val purchase =buildPurchase()
 
-//        every{purchaseRepository.save(purchase)}returns purchase
-//        every{applicationEventPublisher.publishEvent(any())} just runs
-//
-//                purchaseService.create(purchase)
-//
-//        verify(exactly = 1){purchaseRepository.save(purchase)}
-//        verify(exactly = 1){applicationEventPublisher.publishEvent(capture(purchaseEventSlot))}
-//
-//        assertEquals(purchase, purchaseEventSlot.captured.purchaseModel)
+        every{purchaseRepository.save(purchase)}returns purchase
+        every{applicationEventPublisher.publishEvent(any())} just runs
+
+                purchaseService.create(purchase)
+
+        verify(exactly = 1){purchaseRepository.save(purchase)}
+        verify(exactly = 1){applicationEventPublisher.publishEvent(capture(purchaseEventSlot))}
+
+        assertEquals(purchase, purchaseEventSlot.captured.purchaseModel)
     }
 
     @Test
     fun `deve atualizar purchase`() {
-//        val purchase =buildPurchase()
-//
-//        every{purchaseRepository.save(purchase)}returns purchase
-//
-//        purchaseService.update(purchase)
-//
-//        verify(exactly = 1){purchaseRepository.save(purchase)}
+        val purchase =buildPurchase()
+
+        every{purchaseRepository.save(purchase)}returns purchase
+
+        purchaseService.update(purchase)
+
+        verify(exactly = 1){purchaseRepository.save(purchase)}
     }
 
 }
