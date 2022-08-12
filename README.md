@@ -1,4 +1,4 @@
-# kotlin-spring-udemy(Instrutores: [Gustavo Pinoti](https://www.linkedin.com/search/results/all/?keywords=gustavo%20pinoti&origin=RICH_QUERY_SUGGESTION&position=0&searchId=fd42726c-d024-48d0-b638-7eff4304014b&sid=%3BVX) e [Daniel Donato](https://www.linkedin.com/in/daniel-p-donato/)
+# kotlin-spring-udemy(Instrutores: [Gustavo Pinoti](https://www.linkedin.com/search/results/all/?keywords=gustavo%20pinoti&origin=RICH_QUERY_SUGGESTION&position=0&searchId=fd42726c-d024-48d0-b638-7eff4304014b&sid=%3BVX) e [Daniel Donato](https://www.linkedin.com/in/daniel-p-donato/))
 
 #API MERCADO-LIVRO
 
