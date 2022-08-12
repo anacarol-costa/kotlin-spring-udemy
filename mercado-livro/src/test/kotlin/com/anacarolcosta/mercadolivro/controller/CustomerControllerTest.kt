@@ -95,7 +95,7 @@ class CustomerControllerTest {
     fun `deve buscar usuario pelo id quando usuario tiver o mesmo id`() {
         val customer = customerRepository.save(buildCustomer())
 
-       mockMvc.perform(get("/customers/${customer.id}").with(user(UserCustomDetails(customer))))
+       mockMvc.perform(get("/customers/0").with(user(UserCustomDetails(customer))))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.id").value(customer.id))
             .andExpect(jsonPath("$.name").value(customer.name))
@@ -107,7 +107,7 @@ class CustomerControllerTest {
     fun `deve retonar forbidden quando for usuario com id diferente`() {
         val customer = customerRepository.save(buildCustomer())
 
-        mockMvc.perform(get("/customers/0)").with(user(UserCustomDetails(customer))))
+        mockMvc.perform(get("/customers/0").with(user(UserCustomDetails(customer))))
             .andExpect(status().isForbidden)
             .andExpect(jsonPath("$.httpCode").value(403))//valida o erro
             .andExpect(jsonPath("$.message").value("Access Denied"))

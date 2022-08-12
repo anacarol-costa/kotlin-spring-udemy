@@ -42,4 +42,15 @@ data class BookModel(
     ): this(id, name, price, customer) {
         this.status = status
     } //construir um construtor para status
+
+
+    //funções abaixo tem finalidade de estudo referente a teste unitario e de integracao
+    fun isValidName(): Boolean {
+        return verifyNameLength(this.name)
+    }
+
+    fun verifyNameLength(name: String): Boolean {
+        return name.length < 3;
+    }
+
 }
